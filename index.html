@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missão Corporativa: O Desafio Acadêmico</title>
+    <style>
+        :root {
+            --primary: #004d40;
+            --secondary: #00796b;
+            --accent: #ffb300;
+            --bg: #f4f7f6;
+            --text: #333;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #game-container {
+            background-color: var(--white);
+            max-width: 600px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .score-board {
+            background-color: var(--secondary);
+            color: var(--white);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            background-color: var(--bg);
+            border: 2px solid var(--secondary);
+            color: var(--text);
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .correct {
+            background-color: #2e7d32 !important;
+            border-color: #2e7d32 !important;
+            color: white !important;
+        }
+
+        .wrong {
+            background-color: #c62828 !important;
+            border-color: #c62828 !important;
+            color: white !important;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-weight: 500;
+        }
+
+        #next-btn, #restart-btn {
+            display: none;
+            background-color: var(--accent);
+            border: none;
+            color: #000;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #next-btn:hover, #restart-btn:hover {
+            background-color: #ffca28;
+            color: #000;
+        }
+
+        .scenario-tag {
+            display: inline-block;
+            background: #e0f2f1;
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <header>
+            <h1>Missão Corporativa: O Desafio Acadêmico</h1>
+        </header>
+        <div class="score-board">
+            <span id="level-display">Nível: 1/5</span>
+            <span id="score-display">Pontos: 0</span>
+        </div>
+        <main>
+            <div id="start-screen">
+                <h2>Bem-vindo, futuro Técnico em Administração!</h2>
+                <p>Você foi encarregado de preparar um relatório gerencial de pesquisa de mercado e revisar os trabalhos da sua equipe.</p>
+                <p>Sua missão é aplicar as <strong>normas linguísticas e estruturais dos trabalhos técnico-científicos</strong> para garantir a credibilidade e o rigor exigidos no ambiente acadêmico e corporativo.</p>
+                <button onclick="startGame()" style="background-color: var(--primary); color: white; border: none; text-align: center; margin-top: 20px;">Iniciar Missão</button>
+            </div>
+
+            <div id="quiz-screen" style="display: none;">
+                <span class="scenario-tag" id="scenario-tag">Estrutura do Trabalho</span>
+                <div class="question-text" id="question-text">Pergunta aqui</div>
+                <div class="options" id="options-container">
+                    </div>
+                <div class="feedback" id="feedback"></div>
+                <button id="next-btn" onclick="nextQuestion()">Próxima Etapa</button>
+            </div>
+
+            <div id="end-screen" style="display: none; text-align: center;">
+                <h2>Missão Concluída!</h2>
+                <p id="final-score-text" style="font-size: 1.2rem; margin: 20px 0;"></p>
+                <p id="final-message"></p>
+                <button id="restart-btn" onclick="location.reload()" style="display: block; width: 100%;">Jogar Novamente</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                tag: "Estrutura Básica: O Início",
+                text: "Você está elaborando um relatório de pesquisa de mercado. Onde você deve apresentar os objetivos da pesquisa, o problema a ser resolvido e a justificativa de sua importância para a empresa?",
+                options: [
+                    "No Desenvolvimento, junto com os gráficos.",
+                    "Na Introdução, para contextualizar o leitor logo no início.",
+                    "Na Conclusão, para surpreender a diretoria.",
+                    "Nas Referências Bibliográficas."
+                ],
+                correct: 1,
+                explanation: "Exato! A Introdução serve para situar o leitor, apresentando o tema, o problema, os objetivos e a justificativa do trabalho monográfico ou relatório."
+            },
+            {
+                tag: "Estrutura Básica: O Cerne",
+                text: "Durante a análise dos dados mercadológicos, você detalha a metodologia utilizada, apresenta os gráficos de vendas e discute os resultados fundamentados em teorias da administração. Esta fase compõe o(a)...",
+                options: [
+                    "Desenvolvimento.",
+                    "Introdução.",
+                    "Conclusão.",
+                    "Resumo."
+                ],
+                correct: 0,
+                explanation: "Correto. O Desenvolvimento é a parte mais extensa do trabalho, onde a pesquisa é exposta, os dados são analisados e a fundamentação teórica é aplicada."
+            },
+            {
+                tag: "Estrutura Básica: O Fechamento",
+                text: "Ao finalizar o relatório gerencial, você precisa amarrar as ideias, responder ao problema inicial proposto na introdução e sugerir planos de ação, sem adicionar dados novos. Você está escrevendo a...",
+                options: [
+                    "Metodologia.",
+                    "Revisão de Literatura.",
+                    "Introdução.",
+                    "Conclusão."
+                ],
+                correct: 3,
+                explanation: "Perfeito! A Conclusão (ou Considerações Finais) retoma os objetivos iniciais e apresenta a síntese dos resultados, sem introduzir novos argumentos."
+            },
+            {
+                tag: "Credibilidade e Normas",
+                text: "Para dar embasamento ao seu relatório, você citou dados do IBGE e conceitos de um livro de Marketing. Por que é vital organizar essas fontes nas 'Referências Bibliográficas' seguindo normas (como a ABNT)?",
+                options: [
+                    "Apenas para deixar o documento com mais páginas e parecer mais longo.",
+                    "Para garantir a rastreabilidade da informação, evitar plágio e conferir credibilidade científica e profissional ao relatório.",
+                    "Porque as normas bibliográficas substituem a necessidade de um Desenvolvimento bem escrito.",
+                    "Para dificultar a leitura por parte da concorrência."
+                ],
+                correct: 1,
+                explanation: "Exatamente! Em relatórios gerenciais e pesquisas de mercado, citar as fontes corretamente prova que seus dados são reais e confiáveis, baseando a tomada de decisão da empresa em fatos."
+            },
+            {
+                tag: "Tipos de Trabalhos",
+                text: "Seu gestor (ou professor) pediu que você leia um artigo científico sobre as novas tendências de Logística e entregue um texto que resuma as ideias do autor e, em seguida, apresente a sua opinião crítica sobre o tema. Esse tipo de texto é um(a)...",
+                options: [
+                    "Artigo Científico.",
+                    "Monografia.",
+                    "Resenha Crítica.",
+                    "Fichamento."
+                ],
+                correct: 2,
+                explanation: "Muito bem! A resenha crítica vai além do simples resumo; ela exige que o autor emita um juízo de valor, analisando criticamente a obra."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('scenario-tag').innerText = q.tag;
+            document.getElementById('question-text').innerText = q.text;
+            document.getElementById('level-display').innerText = `Nível: ${currentQuestionIndex + 1}/${questions.length}`;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const q = questions[currentQuestionIndex];
+            const buttons = document.querySelectorAll('#options-container button');
+            
+            buttons.forEach(btn => btn.disabled = true); // Desabilita os botões
+
+            const feedbackEl = document.getElementById('feedback');
+            feedbackEl.style.display = 'block';
+
+            if (selectedIndex === q.correct) {
+                btnElement.classList.add('correct');
+                score += 20;
+                document.getElementById('score-display').innerText = `Pontos: ${score}`;
+                feedbackEl.innerHTML = `<strong>✔️ Resposta Correta!</strong><br>${q.explanation}`;
+                feedbackEl.style.backgroundColor = '#e8f5e9';
+                feedbackEl.style.color = '#2e7d32';
+            } else {
+                btnElement.classList.add('wrong');
+                buttons[q.correct].classList.add('correct'); // Mostra a correta
+                feedbackEl.innerHTML = `<strong>❌ Resposta Incorreta.</strong><br>${q.explanation}`;
+                feedbackEl.style.backgroundColor = '#ffebee';
+                feedbackEl.style.color = '#c62828';
+            }
+
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showEndScreen();
+            }
+        }
+
+        function showEndScreen() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'block';
+            
+            document.getElementById('final-score-text').innerText = `Sua pontuação final: ${score} de 100`;
+            
+            let message = "";
+            if (score === 100) {
+                message = "Excelente! Você demonstrou domínio total sobre a estrutura e as normas técnico-científicas. Seus relatórios gerenciais serão impecáveis!";
+            } else if (score >= 60) {
+                message = "Bom trabalho! Você compreende bem a base, mas vale a pena revisar alguns conceitos de normas ABNT para garantir máxima credibilidade nos seus projetos.";
+            } else {
+                message = "Atenção técnica necessária. Revise a estrutura (Introdução, Desenvolvimento, Conclusão) e a importância das referências bibliográficas. Tente novamente!";
+            }
+            
+            document.getElementById('final-message').innerText = message;
+        }
+    </script>
+</body>
+</html>
