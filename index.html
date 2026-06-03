@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Missão Corporativa: O Desafio Acadêmico</title>
-    <!-- Importando fontes modernas do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Paleta Corporate-Modern */
-            --primary-dark: #1a374d; /* Azul profundo confiável */
-            --primary-main: #406882; /* Azul médio profissional */
-            --primary-light: #b1d0e0; /* Azul claro para fundos leves */
-            --accent: #ff7043; /* Laranja queimado para ação (call to action) */
+            --primary-dark: #1a374d; 
+            --primary-main: #406882; 
+            --primary-light: #b1d0e0; 
+            --accent: #ff7043; 
             --accent-hover: #f4511e;
-            --bg-page: #f0f4f8; /* Cinza azulado muito claro */
+            --bg-page: #f0f4f8; 
             --bg-card: #ffffff;
             --text-main: #2c3e50;
             --text-light: #ffffff;
@@ -45,7 +44,6 @@
             padding: 20px;
         }
 
-        /* Container Principal do Jogo */
         #game-container {
             background-color: var(--bg-card);
             max-width: 680px;
@@ -58,7 +56,6 @@
             position: relative;
         }
 
-        /* Barra de Progresso no Topo */
         .progress-container {
             width: 100%;
             height: 8px;
@@ -75,7 +72,6 @@
             transition: width 0.4s ease;
         }
 
-        /* Cabeçalho */
         header {
             background-color: var(--primary-dark);
             color: var(--text-light);
@@ -92,13 +88,67 @@
             letter-spacing: -0.5px;
         }
 
-        /* Área de Conteúdo Principal */
         main {
             padding: 30px 40px;
             flex-grow: 1;
         }
 
-        /* Placar e Info do Nível */
+        /* --- Sistema de Avatar --- */
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 2px solid var(--primary-light);
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            background: var(--white);
+            border-radius: 50%;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .avatar-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .avatar-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .avatar-role {
+            font-family: var(--font-heading);
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* Animação quando o jogador é promovido */
+        @keyframes promote {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); text-shadow: 0 0 10px var(--accent); }
+            100% { transform: scale(1); }
+        }
+
+        .promote-anim {
+            animation: promote 0.6s ease;
+        }
+        /* ------------------------- */
+
         .status-bar {
             display: flex;
             justify-content: space-between;
@@ -126,7 +176,6 @@
             font-size: 1rem;
         }
 
-        /* Pergunta */
         .question-text {
             font-family: var(--font-heading);
             font-size: 1.3rem;
@@ -135,7 +184,6 @@
             color: var(--primary-dark);
         }
 
-        /* Opções de Resposta */
         .options {
             display: flex;
             flex-direction: column;
@@ -168,7 +216,6 @@
             opacity: 0.7;
         }
 
-        /* Estados de Resposta */
         .option-btn.correct {
             background-color: #e8fbf1 !important;
             border-color: var(--correct-green) !important;
@@ -197,7 +244,6 @@
             font-weight: bold;
         }
 
-        /* Feedback e Botões de Ação */
         .feedback {
             margin-top: 25px;
             padding: 20px;
@@ -240,7 +286,6 @@
             transform: scale(0.98);
         }
 
-        /* Tela Inicial e Final */
         #start-screen, #end-screen {
             text-align: center;
             padding: 20px 0;
@@ -265,7 +310,6 @@
             color: var(--accent);
         }
 
-        /* Rodapé */
         footer {
             margin-top: 30px;
             font-size: 0.85rem;
@@ -274,19 +318,19 @@
             font-family: var(--font-body);
         }
 
-        /* Responsividade */
         @media (max-width: 600px) {
             h1 { font-size: 1.4rem; }
             main { padding: 20px 25px; }
             .question-text { font-size: 1.1rem; }
             .option-btn { padding: 15px; font-size: 0.95rem; }
+            .avatar-icon { font-size: 2rem; }
+            .avatar-role { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
     <div id="game-container">
-        <!-- Barra de progresso visual -->
         <div class="progress-container">
             <div id="progress-bar"></div>
         </div>
@@ -296,18 +340,25 @@
         </header>
         
         <main>
-            <!-- Tela Inicial -->
             <div id="start-screen">
-                <div class="start-icon">👔</div>
+                <div class="start-icon">🏢</div>
                 <h2>O Desafio Acadêmico</h2>
                 <p>Olá, futuro Técnico em Administração!</p>
-                <p>Você foi encarregado de revisar os trabalhos e relatórios da sua equipe. Sua missão é aplicar as <strong>normas técnico-científicas</strong> para garantir a credibilidade que o mercado de trabalho exige.</p>
-                <p>Mostre que você domina a estrutura e as referências!</p>
-                <button class="action-btn" onclick="startGame()" style="display: block; margin-top: 30px;">Iniciar Missão</button>
+                <p>Você acaba de entrar na empresa. Para ser promovido, você precisa revisar os relatórios da sua equipe e aplicar as <strong>normas técnico-científicas</strong>.</p>
+                <p>Mostre que você domina a estrutura e as referências para evoluir na sua carreira!</p>
+                <button class="action-btn" onclick="startGame()" style="display: block; margin-top: 30px;">Começar Meu Estágio</button>
             </div>
 
-            <!-- Tela do Jogo (Quiz) -->
             <div id="quiz-screen" style="display: none;">
+                
+                <div class="avatar-container" id="avatar-card">
+                    <div class="avatar-icon" id="avatar-icon">📝</div>
+                    <div class="avatar-info">
+                        <span class="avatar-label">Seu Cargo Atual:</span>
+                        <span class="avatar-role" id="avatar-role">Estagiário</span>
+                    </div>
+                </div>
+
                 <div class="status-bar">
                     <span class="scenario-tag" id="scenario-tag">Estrutura</span>
                     <div class="score-board">
@@ -317,19 +368,16 @@
 
                 <div class="question-text" id="question-text">Pergunta aqui</div>
                 
-                <div class="options" id="options-container">
-                    <!-- Botões injetados via JS -->
-                </div>
+                <div class="options" id="options-container"></div>
                 
                 <div class="feedback" id="feedback"></div>
                 
                 <button id="next-btn" class="action-btn" onclick="nextQuestion()">Próxima Etapa ✓</button>
             </div>
 
-            <!-- Tela Final -->
             <div id="end-screen" style="display: none;">
-                <div class="start-icon">🏆</div>
-                <h2>Missão Concluída!</h2>
+                <div class="avatar-icon" id="final-avatar-icon" style="font-size: 5rem; margin-bottom: 10px;">🏆</div>
+                <h2 id="final-title">Missão Concluída!</h2>
                 <p id="final-score-text" style="font-size: 1.3rem; font-weight: 600; color: var(--primary-dark); margin: 20px 0;"></p>
                 <p id="final-message"></p>
                 <button class="action-btn" onclick="location.reload()" style="display: block; width: 100%; background-color: var(--primary-dark);">Jogar Novamente</button>
@@ -337,7 +385,6 @@
         </main>
     </div>
 
-    <!-- Rodapé solicitado -->
     <footer>
         Desenvolvido por Katsusuke Yamazaki Filho
     </footer>
@@ -406,6 +453,16 @@
             }
         ];
 
+        // Definição dos Cargos por Pontuação
+        const careerRoles = [
+            { points: 0,   title: "Estagiário",           icon: "📝" },
+            { points: 20,  title: "Assistente Admin.",    icon: "💼" },
+            { points: 40,  title: "Administrador Jr.",    icon: "📊" },
+            { points: 60,  title: "Administrador Pleno",  icon: "📈" },
+            { points: 80,  title: "Administrador Sênior", icon: "👔" },
+            { points: 100, title: "Diretor Executivo",    icon: "🚀" }
+        ];
+
         let currentQuestionIndex = 0;
         let score = 0;
 
@@ -414,10 +471,30 @@
             document.getElementById('progress-bar').style.width = percentage + '%';
         }
 
+        function updateAvatar() {
+            // Calcula o nível com base nos pontos (0 a 5)
+            const levelIndex = Math.floor(score / 20);
+            const currentRole = careerRoles[levelIndex];
+
+            const iconEl = document.getElementById('avatar-icon');
+            const roleEl = document.getElementById('avatar-role');
+
+            // Se o cargo mudou (houve promoção), roda a animação
+            if (roleEl.innerText !== currentRole.title && score > 0) {
+                iconEl.classList.remove('promote-anim'); // Reseta a animação
+                void iconEl.offsetWidth; // Trigger reflow para reiniciar a animação
+                iconEl.classList.add('promote-anim');
+            }
+
+            iconEl.innerText = currentRole.icon;
+            roleEl.innerText = currentRole.title;
+        }
+
         function startGame() {
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('quiz-screen').style.display = 'block';
             updateProgressBar();
+            updateAvatar();
             loadQuestion();
         }
 
@@ -454,10 +531,14 @@
                 btnElement.classList.add('correct');
                 score += 20;
                 document.getElementById('score-display').innerText = score;
-                feedbackEl.innerHTML = `<strong>✔️ Muito bem!</strong><br>${q.explanation}`;
+                
+                feedbackEl.innerHTML = `<strong>✔️ Correto! Você foi promovido!</strong><br>${q.explanation}`;
                 feedbackEl.style.backgroundColor = '#e8fbf1';
                 feedbackEl.style.color = '#27ae60';
                 feedbackEl.style.borderLeftColor = '#2ecc71';
+
+                // Atualiza o Avatar e dispara a animação de promoção
+                updateAvatar();
             } else {
                 btnElement.classList.add('wrong');
                 buttons[q.correct].classList.add('correct');
@@ -481,21 +562,25 @@
         }
 
         function showEndScreen() {
-            // Garante que a barra chegue a 100% no final
             document.getElementById('progress-bar').style.width = '100%';
-            
             document.getElementById('quiz-screen').style.display = 'none';
             document.getElementById('end-screen').style.display = 'block';
             
+            // Pega o cargo final
+            const levelIndex = Math.floor(score / 20);
+            const finalRole = careerRoles[levelIndex];
+
+            document.getElementById('final-avatar-icon').innerText = finalRole.icon;
+            document.getElementById('final-title').innerText = `Você chegou a: ${finalRole.title}!`;
             document.getElementById('final-score-text').innerText = `Sua pontuação: ${score} de 100 pontos`;
             
             let message = "";
             if (score === 100) {
-                message = "Excelente! Você demonstrou domínio total. Seus relatórios gerenciais terão o rigor e a credibilidade necessários para o sucesso organizacional.";
+                message = "Excelente! Como Diretor Executivo, você demonstrou domínio total. Seus relatórios gerenciais têm o rigor e a credibilidade necessários para o sucesso da empresa.";
             } else if (score >= 60) {
-                message = "Bom trabalho! Você compreende a base, mas vale a pena revisar as normas ABNT para garantir máxima precisão nos seus futuros projetos.";
+                message = "Bom trabalho! Você evoluiu bem na carreira, mas vale a pena revisar as normas ABNT para alcançar a diretoria nos seus futuros projetos.";
             } else {
-                message = "Revisão necessária. A estrutura e a fundamentação teórica são cruciais na administração. Revise os conceitos e tente novamente para melhorar sua performance.";
+                message = "O mercado de trabalho exige precisão. A estrutura e a fundamentação teórica são cruciais na administração. Revise os conceitos e tente novamente para subir de cargo.";
             }
             
             document.getElementById('final-message').innerText = message;
