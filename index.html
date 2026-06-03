@@ -4,21 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Missão Corporativa: O Desafio Acadêmico</title>
+    <!-- Importando fontes modernas do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #004d40;
-            --secondary: #00796b;
-            --accent: #ffb300;
-            --bg: #f4f7f6;
-            --text: #333;
-            --white: #ffffff;
+            /* Paleta Corporate-Modern */
+            --primary-dark: #1a374d; /* Azul profundo confiável */
+            --primary-main: #406882; /* Azul médio profissional */
+            --primary-light: #b1d0e0; /* Azul claro para fundos leves */
+            --accent: #ff7043; /* Laranja queimado para ação (call to action) */
+            --accent-hover: #f4511e;
+            --bg-page: #f0f4f8; /* Cinza azulado muito claro */
+            --bg-card: #ffffff;
+            --text-main: #2c3e50;
+            --text-light: #ffffff;
+            --correct-green: #2ecc71;
+            --wrong-red: #e74c3c;
+            
+            /* Fontes */
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
         }
         
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: var(--font-body);
+            background: var(--bg-page) linear-gradient(135deg, #e6eff5 0%, #f0f4f8 100%);
+            color: var(--text-main);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -26,177 +45,320 @@
             padding: 20px;
         }
 
+        /* Container Principal do Jogo */
         #game-container {
-            background-color: var(--white);
-            max-width: 600px;
+            background-color: var(--bg-card);
+            max-width: 680px;
             width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(26, 55, 77, 0.1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
+        /* Barra de Progresso no Topo */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background-color: var(--accent);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Cabeçalho */
         header {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 20px;
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 35px 30px 25px 30px;
             text-align: center;
+            border-bottom: 5px solid var(--primary-main);
         }
 
         h1 {
+            font-family: var(--font-heading);
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        .score-board {
-            background-color: var(--secondary);
-            color: var(--white);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-        }
-
+        /* Área de Conteúdo Principal */
         main {
-            padding: 30px;
+            padding: 30px 40px;
             flex-grow: 1;
         }
 
-        .question-text {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
+        /* Placar e Info do Nível */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
 
+        .scenario-tag {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .score-board {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+
+        /* Pergunta */
+        .question-text {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: var(--primary-dark);
+        }
+
+        /* Opções de Resposta */
         .options {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        button {
-            background-color: var(--bg);
-            border: 2px solid var(--secondary);
-            color: var(--text);
-            padding: 15px;
+        .option-btn {
+            background-color: var(--bg-card);
+            border: 2px solid #e0e6ed;
+            color: var(--text-main);
+            padding: 18px 20px;
             font-size: 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             text-align: left;
+            position: relative;
+            font-weight: 400;
         }
 
-        button:hover {
-            background-color: var(--secondary);
-            color: var(--white);
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-main);
+            background-color: #fafcfe;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
         }
 
-        button:disabled {
+        .option-btn:disabled {
             cursor: not-allowed;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
-        .correct {
-            background-color: #2e7d32 !important;
-            border-color: #2e7d32 !important;
-            color: white !important;
+        /* Estados de Resposta */
+        .option-btn.correct {
+            background-color: #e8fbf1 !important;
+            border-color: var(--correct-green) !important;
+            color: var(--correct-green) !important;
+            font-weight: 600;
         }
 
-        .wrong {
-            background-color: #c62828 !important;
-            border-color: #c62828 !important;
-            color: white !important;
+        .option-btn.correct::after {
+            content: '✓';
+            position: absolute;
+            right: 20px;
+            font-weight: bold;
         }
 
+        .option-btn.wrong {
+            background-color: #fdf2f2 !important;
+            border-color: var(--wrong-red) !important;
+            color: var(--wrong-red) !important;
+            font-weight: 600;
+        }
+
+        .option-btn.wrong::after {
+            content: '✕';
+            position: absolute;
+            right: 20px;
+            font-weight: bold;
+        }
+
+        /* Feedback e Botões de Ação */
         .feedback {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
             display: none;
-            font-weight: 500;
+            font-weight: 400;
+            line-height: 1.5;
+            border-left: 5px solid transparent;
         }
 
-        #next-btn, #restart-btn {
+        .feedback strong {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+        }
+
+        .action-btn {
             display: none;
             background-color: var(--accent);
             border: none;
-            color: #000;
+            color: var(--text-light);
             text-align: center;
-            font-weight: bold;
-            margin-top: 20px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            margin-top: 25px;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        #next-btn:hover, #restart-btn:hover {
-            background-color: #ffca28;
-            color: #000;
+        .action-btn:hover {
+            background-color: var(--accent-hover);
         }
 
-        .scenario-tag {
-            display: inline-block;
-            background: #e0f2f1;
-            color: var(--primary);
-            padding: 5px 10px;
-            border-radius: 4px;
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Tela Inicial e Final */
+        #start-screen, #end-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        #start-screen h2, #end-screen h2 {
+            font-family: var(--font-heading);
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        #start-screen p, #end-screen p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #546e7a;
+        }
+
+        .start-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        /* Rodapé */
+        footer {
+            margin-top: 30px;
             font-size: 0.85rem;
-            margin-bottom: 10px;
-            font-weight: bold;
+            color: #90a4ae;
+            text-align: center;
+            font-family: var(--font-body);
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.4rem; }
+            main { padding: 20px 25px; }
+            .question-text { font-size: 1.1rem; }
+            .option-btn { padding: 15px; font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
 
     <div id="game-container">
-        <header>
-            <h1>Missão Corporativa: O Desafio Acadêmico</h1>
-        </header>
-        <div class="score-board">
-            <span id="level-display">Nível: 1/5</span>
-            <span id="score-display">Pontos: 0</span>
+        <!-- Barra de progresso visual -->
+        <div class="progress-container">
+            <div id="progress-bar"></div>
         </div>
+
+        <header>
+            <h1>Missão Corporativa</h1>
+        </header>
+        
         <main>
+            <!-- Tela Inicial -->
             <div id="start-screen">
-                <h2>Bem-vindo, futuro Técnico em Administração!</h2>
-                <p>Você foi encarregado de preparar um relatório gerencial de pesquisa de mercado e revisar os trabalhos da sua equipe.</p>
-                <p>Sua missão é aplicar as <strong>normas linguísticas e estruturais dos trabalhos técnico-científicos</strong> para garantir a credibilidade e o rigor exigidos no ambiente acadêmico e corporativo.</p>
-                <button onclick="startGame()" style="background-color: var(--primary); color: white; border: none; text-align: center; margin-top: 20px;">Iniciar Missão</button>
+                <div class="start-icon">👔</div>
+                <h2>O Desafio Acadêmico</h2>
+                <p>Olá, futuro Técnico em Administração!</p>
+                <p>Você foi encarregado de revisar os trabalhos e relatórios da sua equipe. Sua missão é aplicar as <strong>normas técnico-científicas</strong> para garantir a credibilidade que o mercado de trabalho exige.</p>
+                <p>Mostre que você domina a estrutura e as referências!</p>
+                <button class="action-btn" onclick="startGame()" style="display: block; margin-top: 30px;">Iniciar Missão</button>
             </div>
 
+            <!-- Tela do Jogo (Quiz) -->
             <div id="quiz-screen" style="display: none;">
-                <span class="scenario-tag" id="scenario-tag">Estrutura do Trabalho</span>
-                <div class="question-text" id="question-text">Pergunta aqui</div>
-                <div class="options" id="options-container">
+                <div class="status-bar">
+                    <span class="scenario-tag" id="scenario-tag">Estrutura</span>
+                    <div class="score-board">
+                        Pontos: <span id="score-display">0</span>
                     </div>
+                </div>
+
+                <div class="question-text" id="question-text">Pergunta aqui</div>
+                
+                <div class="options" id="options-container">
+                    <!-- Botões injetados via JS -->
+                </div>
+                
                 <div class="feedback" id="feedback"></div>
-                <button id="next-btn" onclick="nextQuestion()">Próxima Etapa</button>
+                
+                <button id="next-btn" class="action-btn" onclick="nextQuestion()">Próxima Etapa ✓</button>
             </div>
 
-            <div id="end-screen" style="display: none; text-align: center;">
+            <!-- Tela Final -->
+            <div id="end-screen" style="display: none;">
+                <div class="start-icon">🏆</div>
                 <h2>Missão Concluída!</h2>
-                <p id="final-score-text" style="font-size: 1.2rem; margin: 20px 0;"></p>
+                <p id="final-score-text" style="font-size: 1.3rem; font-weight: 600; color: var(--primary-dark); margin: 20px 0;"></p>
                 <p id="final-message"></p>
-                <button id="restart-btn" onclick="location.reload()" style="display: block; width: 100%;">Jogar Novamente</button>
+                <button class="action-btn" onclick="location.reload()" style="display: block; width: 100%; background-color: var(--primary-dark);">Jogar Novamente</button>
             </div>
         </main>
     </div>
 
+    <!-- Rodapé solicitado -->
+    <footer>
+        Desenvolvido por Katsusuke Yamazaki Filho
+    </footer>
+
     <script>
         const questions = [
             {
-                tag: "Estrutura Básica: O Início",
-                text: "Você está elaborando um relatório de pesquisa de mercado. Onde você deve apresentar os objetivos da pesquisa, o problema a ser resolvido e a justificativa de sua importância para a empresa?",
+                tag: "Estrutura Básica",
+                text: "Você está elaborando um relatório de pesquisa de mercado. Onde você deve apresentar os objetivos da pesquisa, o problema e a justificativa de sua importância para a empresa?",
                 options: [
                     "No Desenvolvimento, junto com os gráficos.",
-                    "Na Introdução, para contextualizar o leitor logo no início.",
+                    "Na Introdução, para contextualizar o leitor.",
                     "Na Conclusão, para surpreender a diretoria.",
                     "Nas Referências Bibliográficas."
                 ],
                 correct: 1,
-                explanation: "Exato! A Introdução serve para situar o leitor, apresentando o tema, o problema, os objetivos e a justificativa do trabalho monográfico ou relatório."
+                explanation: "A Introdução serve para situar o leitor, apresentando o tema, o problema, os objetivos e a justificativa do trabalho."
             },
             {
-                tag: "Estrutura Básica: O Cerne",
-                text: "Durante a análise dos dados mercadológicos, você detalha a metodologia utilizada, apresenta os gráficos de vendas e discute os resultados fundamentados em teorias da administração. Esta fase compõe o(a)...",
+                tag: "O Cerne do Trabalho",
+                text: "Durante a análise, você detalha a metodologia, apresenta os gráficos de vendas e discute os resultados fundamentados em teorias. Esta fase compõe o(a)...",
                 options: [
                     "Desenvolvimento.",
                     "Introdução.",
@@ -204,11 +366,11 @@
                     "Resumo."
                 ],
                 correct: 0,
-                explanation: "Correto. O Desenvolvimento é a parte mais extensa do trabalho, onde a pesquisa é exposta, os dados são analisados e a fundamentação teórica é aplicada."
+                explanation: "O Desenvolvimento é a parte mais extensa, onde a pesquisa é exposta, os dados são analisados e a fundamentação teórica é aplicada."
             },
             {
-                tag: "Estrutura Básica: O Fechamento",
-                text: "Ao finalizar o relatório gerencial, você precisa amarrar as ideias, responder ao problema inicial proposto na introdução e sugerir planos de ação, sem adicionar dados novos. Você está escrevendo a...",
+                tag: "O Fechamento",
+                text: "Ao finalizar o relatório gerencial, você precisa responder ao problema inicial proposto e sugerir planos de ação, sem adicionar dados novos. Você está escrevendo a...",
                 options: [
                     "Metodologia.",
                     "Revisão de Literatura.",
@@ -216,23 +378,23 @@
                     "Conclusão."
                 ],
                 correct: 3,
-                explanation: "Perfeito! A Conclusão (ou Considerações Finais) retoma os objetivos iniciais e apresenta a síntese dos resultados, sem introduzir novos argumentos."
+                explanation: "A Conclusão retoma os objetivos iniciais e apresenta a síntese dos resultados, sem introduzir novos argumentos."
             },
             {
-                tag: "Credibilidade e Normas",
-                text: "Para dar embasamento ao seu relatório, você citou dados do IBGE e conceitos de um livro de Marketing. Por que é vital organizar essas fontes nas 'Referências Bibliográficas' seguindo normas (como a ABNT)?",
+                tag: "Credibilidade",
+                text: "Para dar embasamento, você citou dados do IBGE. Por que é vital organizar essas fontes nas 'Referências Bibliográficas' seguindo normas (como a ABNT)?",
                 options: [
-                    "Apenas para deixar o documento com mais páginas e parecer mais longo.",
-                    "Para garantir a rastreabilidade da informação, evitar plágio e conferir credibilidade científica e profissional ao relatório.",
-                    "Porque as normas bibliográficas substituem a necessidade de um Desenvolvimento bem escrito.",
+                    "Apenas para deixar o documento com mais páginas.",
+                    "Para garantir a rastreabilidade, evitar plágio e conferir credibilidade científica e profissional.",
+                    "Porque as normas bibliográficas substituem um Desenvolvimento bem escrito.",
                     "Para dificultar a leitura por parte da concorrência."
                 ],
                 correct: 1,
-                explanation: "Exatamente! Em relatórios gerenciais e pesquisas de mercado, citar as fontes corretamente prova que seus dados são reais e confiáveis, baseando a tomada de decisão da empresa em fatos."
+                explanation: "Citar as fontes corretamente prova que seus dados são confiáveis, baseando a tomada de decisão da empresa em fatos."
             },
             {
-                tag: "Tipos de Trabalhos",
-                text: "Seu gestor (ou professor) pediu que você leia um artigo científico sobre as novas tendências de Logística e entregue um texto que resuma as ideias do autor e, em seguida, apresente a sua opinião crítica sobre o tema. Esse tipo de texto é um(a)...",
+                tag: "Gêneros Textuais",
+                text: "Seu gestor pediu um texto que resuma as ideias de um artigo sobre Logística e, em seguida, apresente a sua opinião crítica sobre o tema. Isso é um(a)...",
                 options: [
                     "Artigo Científico.",
                     "Monografia.",
@@ -240,16 +402,22 @@
                     "Fichamento."
                 ],
                 correct: 2,
-                explanation: "Muito bem! A resenha crítica vai além do simples resumo; ela exige que o autor emita um juízo de valor, analisando criticamente a obra."
+                explanation: "A resenha crítica vai além do resumo; ela exige que o autor emita um juízo de valor, analisando criticamente a obra."
             }
         ];
 
         let currentQuestionIndex = 0;
         let score = 0;
 
+        function updateProgressBar() {
+            const percentage = ((currentQuestionIndex) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+        }
+
         function startGame() {
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('quiz-screen').style.display = 'block';
+            updateProgressBar();
             loadQuestion();
         }
 
@@ -257,13 +425,13 @@
             const q = questions[currentQuestionIndex];
             document.getElementById('scenario-tag').innerText = q.tag;
             document.getElementById('question-text').innerText = q.text;
-            document.getElementById('level-display').innerText = `Nível: ${currentQuestionIndex + 1}/${questions.length}`;
             
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             
             q.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
+                btn.classList.add('option-btn');
                 btn.innerText = opt;
                 btn.onclick = () => checkAnswer(index, btn);
                 optionsContainer.appendChild(btn);
@@ -275,9 +443,9 @@
 
         function checkAnswer(selectedIndex, btnElement) {
             const q = questions[currentQuestionIndex];
-            const buttons = document.querySelectorAll('#options-container button');
+            const buttons = document.querySelectorAll('#options-container .option-btn');
             
-            buttons.forEach(btn => btn.disabled = true); // Desabilita os botões
+            buttons.forEach(btn => btn.disabled = true);
 
             const feedbackEl = document.getElementById('feedback');
             feedbackEl.style.display = 'block';
@@ -285,16 +453,18 @@
             if (selectedIndex === q.correct) {
                 btnElement.classList.add('correct');
                 score += 20;
-                document.getElementById('score-display').innerText = `Pontos: ${score}`;
-                feedbackEl.innerHTML = `<strong>✔️ Resposta Correta!</strong><br>${q.explanation}`;
-                feedbackEl.style.backgroundColor = '#e8f5e9';
-                feedbackEl.style.color = '#2e7d32';
+                document.getElementById('score-display').innerText = score;
+                feedbackEl.innerHTML = `<strong>✔️ Muito bem!</strong><br>${q.explanation}`;
+                feedbackEl.style.backgroundColor = '#e8fbf1';
+                feedbackEl.style.color = '#27ae60';
+                feedbackEl.style.borderLeftColor = '#2ecc71';
             } else {
                 btnElement.classList.add('wrong');
-                buttons[q.correct].classList.add('correct'); // Mostra a correta
-                feedbackEl.innerHTML = `<strong>❌ Resposta Incorreta.</strong><br>${q.explanation}`;
-                feedbackEl.style.backgroundColor = '#ffebee';
-                feedbackEl.style.color = '#c62828';
+                buttons[q.correct].classList.add('correct');
+                feedbackEl.innerHTML = `<strong>❌ Atenção técnica.</strong><br>${q.explanation}`;
+                feedbackEl.style.backgroundColor = '#fdf2f2';
+                feedbackEl.style.color = '#c0392b';
+                feedbackEl.style.borderLeftColor = '#e74c3c';
             }
 
             document.getElementById('next-btn').style.display = 'block';
@@ -302,6 +472,7 @@
 
         function nextQuestion() {
             currentQuestionIndex++;
+            updateProgressBar();
             if (currentQuestionIndex < questions.length) {
                 loadQuestion();
             } else {
@@ -310,18 +481,21 @@
         }
 
         function showEndScreen() {
+            // Garante que a barra chegue a 100% no final
+            document.getElementById('progress-bar').style.width = '100%';
+            
             document.getElementById('quiz-screen').style.display = 'none';
             document.getElementById('end-screen').style.display = 'block';
             
-            document.getElementById('final-score-text').innerText = `Sua pontuação final: ${score} de 100`;
+            document.getElementById('final-score-text').innerText = `Sua pontuação: ${score} de 100 pontos`;
             
             let message = "";
             if (score === 100) {
-                message = "Excelente! Você demonstrou domínio total sobre a estrutura e as normas técnico-científicas. Seus relatórios gerenciais serão impecáveis!";
+                message = "Excelente! Você demonstrou domínio total. Seus relatórios gerenciais terão o rigor e a credibilidade necessários para o sucesso organizacional.";
             } else if (score >= 60) {
-                message = "Bom trabalho! Você compreende bem a base, mas vale a pena revisar alguns conceitos de normas ABNT para garantir máxima credibilidade nos seus projetos.";
+                message = "Bom trabalho! Você compreende a base, mas vale a pena revisar as normas ABNT para garantir máxima precisão nos seus futuros projetos.";
             } else {
-                message = "Atenção técnica necessária. Revise a estrutura (Introdução, Desenvolvimento, Conclusão) e a importância das referências bibliográficas. Tente novamente!";
+                message = "Revisão necessária. A estrutura e a fundamentação teórica são cruciais na administração. Revise os conceitos e tente novamente para melhorar sua performance.";
             }
             
             document.getElementById('final-message').innerText = message;
